@@ -75,4 +75,19 @@ class SolarProjectsTest extends TestCase
                 ],
             ]);
     }
+
+    /**
+     * Test function for bulk delete of SolarProjects
+     */
+
+    public function testDestroyMany()
+    {
+        $ids = SolarProject::take(5)->pluck('uuid');
+
+        $response = $this->json('DELETE', "/api/solar_projects", [
+            'ids' => $ids
+        ]);
+
+        $response->assertStatus(200);
+    }
 }

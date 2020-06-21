@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Http\Resources\ContactResource;
 use App\Http\Resources\ContactCollection;
 use App\Models\Contact;
+use App\Http\Requests\ContactUpdateRequest;
 
 class ContactsController extends Controller
 {
@@ -40,8 +41,21 @@ class ContactsController extends Controller
     }
 
     /** Update a Contact, either wholly via PUT or partially via PATCH. */
-    public function update(Request $request, Contact $contact)
+    /**
+     * TODO make use of the Laravel FormRequest class for validation for
+     * less clutter in controllers. Generally, controllers should be used to handle requests and
+     * return responses. Validations would preferrably be done separately for good readability and 
+     * scalability.
+     * 
+     * ContactUpdateRequest class has been created as an example
+     * 
+     * Please check the commented section 
+     */
+    public function update(ContactUpdateRequest $request, Contact $contact)
     {
+
+        //$data = $request->validated();
+        
         if ($request->isMethod('patch')) {
             $data = $this->validate($request, [
                 'first_name' => 'string|max:255',
@@ -51,7 +65,7 @@ class ContactsController extends Controller
         } else {
             $data = $this->validate($request, [
                 'first_name' => 'string|required|max:255',
-                'first_name' => 'string|present|max:255',
+                'last_name' => 'string|present|max:255', //Task 1. changed 'first_name' to 'last_name' for validation and data store.
                 'email' => 'string|present|max:255',
             ]);
         }
